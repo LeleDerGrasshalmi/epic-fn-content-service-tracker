@@ -1,0 +1,63 @@
+<div class="modal fade" id="newModuleModal" tabindex="-1" role="dialog" aria-labelledby="newModuleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-body">
+                <!-- ko with: form -->
+                <div class="form-group mb-4">
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <label class="input-group-text" for="newModuleModal_ContentType">Content Type</label>
+                        </div>
+                        <select class="custom-select" id="newModuleModal_ContentType" data-bind="
+                            value: contentType$,
+                            options: contentTypeOptions$,
+                            disable: $root.busy$">
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="newContentSwitches" class="h6 d-block"><u>Relevance</u></label>
+                    <div class="custom-control-inline custom-switch" id="newContentSwitches">
+                        <input type="checkbox" class="custom-control-input" id="newContentSwitch_Client" data-bind="checked: clientRelevance$, disable: $root.busy$">
+                        <label class="custom-control-label" for="newContentSwitch_Client">Client</label>
+                    </div>
+                    <div class="custom-control-inline custom-switch">
+                        <input type="checkbox" class="custom-control-input" id="newContentSwitch_Server" data-bind="checked: serverRelevance$, disable: $root.busy$">
+                        <label class="custom-control-label" for="newContentSwitch_Server">Server</label>
+                    </div>
+                </div>
+                <div class="form-group mb-4">
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <label class="input-group-text" for="newModuleModal_ModuleName">Name</label>
+                        </div>
+                        <input type="text" placeholder="unique name within project (optional)" data-bind="value: moduleName$, disable: $root.busy$" class="form-control" id="newModuleModal_ModuleName">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="newModuleModal_Desc" class="h6 d-block"><u>Description</u></label>
+                    <textarea class="form-control" id="newModuleModal_Desc" rows="3" data-bind="value: description$, disable: $root.busy$"></textarea>
+                </div>
+
+                <div class="form-group mb-4">
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <label class="input-group-text" for="newModuleModal_DesiredContentId">Desired ID</label>
+                        </div>
+                        <input type="text" placeholder="Leave blank for random UUID" data-bind="value: desiredContentId$, disable: $root.busy$" class="form-control" id="newModuleModal_DesiredContentId">
+                    </div>
+                </div>
+                <!-- /ko -->
+                <div class="alert alert-danger" data-bind="text: error$(), visible: error$()"></div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger"  data-bind="click: hide, disable: busy$">Cancel</button>
+                <button type="button" class="btn btn-primary" data-bind="click: submit, hidden: busy$">Create</button>
+                <button class="btn btn-primary" type="button" data-bind="visible: busy$" disabled>
+                    <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Creating...
+                </button>
+            </div>
+        </div>
+    </div>
+</div>

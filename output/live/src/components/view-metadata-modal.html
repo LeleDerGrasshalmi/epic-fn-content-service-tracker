@@ -1,0 +1,37 @@
+<div class="modal fade" tabindex="-1" role="dialog" aria-hidden="true" data-bind="id: modalId, aria-labelledby: modalId + 'Title'">
+    <form class="form" data-bind="submit: () => submit()">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" data-bind="id: modalId + 'Title', text: modalTitle"></h5>
+                    <div class="icon-bar">
+                        <a href="javascript:" title="formatted" data-toggle="tooltip" data-bind="click: setView('formatted'), visible: view$() !== 'formatted'"><i class="fa fa-align-justify mr-2"></i></a>
+                        <a href="javascript:" title="raw json" data-toggle="tooltip" data-bind="click: setView('json'), visible: view$() !== 'json'"><i class="fa fa-code mr-2"></i></a>
+                    </div>
+                </div>
+
+                <div class="modal-body">
+                    <meta-editor params="
+                        parent: $parent,
+                        busy: busy$,
+                        view: view$,
+                        canEdit: canEdit$,
+                        source: metaSource$,
+                        changes$: metaChanges$">
+                    </meta-editor>
+                    <div class="alert alert-danger" data-bind="text: error$(), visible: error$()"></div>
+                </div>
+                <div class="modal-footer">
+                    <div data-bind="visible: canEdit$">
+                        <button type="button" class="btn btn-danger"  data-bind="click: hide, disable: busy$">Cancel</button>
+                        <button type="submit" class="btn btn-primary" data-bind="hidden: busy$, disable: busy$">Save</button>
+                    </div>
+                    <button type="button" class="btn btn-primary"  data-bind="hidden: canEdit$, click: hide, disable: busy$">OK</button>
+                    <button class="btn btn-primary" type="button" data-bind="visible: busy$" disabled>
+                        <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Creating...
+                    </button>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
