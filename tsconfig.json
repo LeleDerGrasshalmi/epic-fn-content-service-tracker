@@ -1,5 +1,5 @@
 {
-  "include": ["./**/*.ts", "./**/*.js", "./.eslintrc.cjs"],
+  "include": ["./src/**/*.ts", "./.eslintrc.cjs"],
   "compilerOptions": {
     "strict": true,
     "moduleResolution": "node",

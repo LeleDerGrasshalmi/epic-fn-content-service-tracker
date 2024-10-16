@@ -17,46 +17,51 @@ const main = async () => {
     const [deployment, host] = hostEntries[i];
     const deploymentFolder = `${outputFolder}/${deployment}`;
 
-    if (!fs.existsSync(deploymentFolder)) {
-      await fsp.mkdir(deploymentFolder, { recursive: true });
-    }
-
-    for (let j = 0; j < files.length; j += 1) {
-      const file = files[j];
-      const { success, content } = await getRemoteContent(`https://${host}${file}`);
-
-      if (success) {
-        const filePath = `${deploymentFolder}${file}`;
-        const fileDir = path.parse(filePath).dir;
-
-        if (!fs.existsSync(fileDir)) {
-          await fsp.mkdir(fileDir, { recursive: true });
-        }
-
-        await fsp.writeFile(filePath, content);
+    try {
+      if (!fs.existsSync(deploymentFolder)) {
+        await fsp.mkdir(deploymentFolder, { recursive: true });
       }
+
+      for (let j = 0; j < files.length; j += 1) {
+        const file = files[j];
+        const { success, content } = await getRemoteContent(`https://${host}${file}`);
+
+        if (success) {
+          const filePath = `${deploymentFolder}${file}`;
+          const fileDir = path.parse(filePath).dir;
+
+          if (!fs.existsSync(fileDir)) {
+            await fsp.mkdir(fileDir, { recursive: true });
+          }
+
+          await fsp.writeFile(filePath, content.trim());
+        }
+      }
+
+      execSync(`git add ${deploymentFolder}`);
+
+      const gitStatus = execSync(`git status ${deploymentFolder}`)?.toString('utf-8') || '';
+      const isModified = gitStatus.includes(outputFolder);
+
+      if (!isModified) {
+        continue;
+      }
+
+      const commitMessage = `Modified ${deployment}`;
+
+      console.info(commitMessage);
+
+      if (env.GIT_DO_NOT_COMMIT?.toLowerCase() === 'true') {
+        continue;
+      }
+
+      execSync('git config user.email "41898282+github-actions[bot]@users.noreply.github.com"');
+      execSync('git config user.name "github-actions[bot]"');
+      execSync('git config commit.gpgsign false');
+      execSync(`git commit -m "${commitMessage}"`);
+    } catch (err: unknown) {
+      console.error(`updating deployment ${deployment} failed`, err);
     }
-
-    const gitStatus = execSync(`git status ${deploymentFolder}`)?.toString('utf-8') || '';
-    const isModified = gitStatus.includes(outputFolder);
-
-    if (!isModified) {
-      continue;
-    }
-
-    const commitMessage = `Modified ${deployment}`;
-
-    console.info(commitMessage);
-
-    if (env.GIT_DO_NOT_COMMIT?.toLowerCase() === 'true') {
-      continue;
-    }
-
-    execSync('git add output');
-    execSync('git config user.email "41898282+github-actions[bot]@users.noreply.github.com"');
-    execSync('git config user.name "github-actions[bot]"');
-    execSync('git config commit.gpgsign false');
-    execSync(`git commit -m "${commitMessage}"`);
   }
 
   if (env.GIT_DO_NOT_PUSH?.toLowerCase() === 'true') {
