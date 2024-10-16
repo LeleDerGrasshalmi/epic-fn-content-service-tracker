@@ -1,0 +1,66 @@
+<div class="modal fade" id="editTeamDomainModal" tabindex="-1" role="dialog" aria-labelledby="editTeamDomainModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-body">
+                <!-- ko if: !!target$() -->
+                <!-- ko with: form -->
+                <div class="col-12 mb-4 ml-4">
+                    <div class="row mb-4 pr-4">
+                        <div class="col-12 pl-4">
+                            <div class="form-group">
+                                <label for="editTeamDomainModal_Name" class="h6 d-block"><u>Domain</u></label>
+                                <input type="text" style="width: 85%;" class="form-control" placeholder="@epicgames.com" id="editTeamDomainModal_Domain" data-bind="value: domain$, disable: $root.busy$"></text>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-12 mb-3">
+                            <h5>
+                                <i class="fa fa-shield" aria-hidden="true" style="font-size: 21px;"></i>
+                                <u>Default Permissions</u>
+                            </h5>
+                        </div>
+                    </div>
+                    <div class="row pl-3">
+                        <div class="col-6">
+                            <div class="row mb-2">
+                                <div class="col-1">
+                                    <input type="checkbox" data-bind="checked: edit$">
+                                </div>
+                                <div class="col">Edit</div>
+                            </div>
+                            <div class="row mb-2">
+                                <div class="col-1">
+                                    <input type="checkbox" data-bind="checked: operate$">
+                                </div>
+                                <div class="col">Operate</div>
+                            </div>
+                            <div class="row mb-2">
+                                <div class="col-1">
+                                    <input type="checkbox" data-bind="checked: publish$">
+                                </div>
+                                <div class="col">Publish</div>
+                            </div>
+                            <div class="row mb-2">
+                                <div class="col-1">
+                                    <input type="checkbox" data-bind="checked: admin$">
+                                </div>
+                                <div class="col">Admin</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- /ko -->
+                <!-- /ko -->
+                <div class="alert alert-danger" data-bind="text: error$(), visible: error$()"></div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger"  data-bind="click: hide, disable: busy$">Cancel</button>
+                <button type="button" class="btn btn-primary" data-bind="click: submit, hidden: busy$">Save</button>
+                <button class="btn btn-primary" type="button" data-bind="visible: busy$" disabled>
+                    <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Saving...
+                </button>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,59 @@
+<div class="modal fade" id="editTeamWorkspaceModal" tabindex="-1" role="dialog" aria-labelledby="editTeamWorkspaceModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-body">
+                <!-- ko with: form -->
+                <div class="col-12 mb-4 ml-4">
+                    <div class="row mb-4 pr-4">
+                        <div class="col-1">
+                            <i class="fa fa-user-circle" aria-hidden="true" style="font-size: 21px;"></i>
+                        </div>
+                        <div class="col-11">
+                            <div class="form-group">
+                                <label for="editTeamWorkspaceModal_Name" class="h6 d-block"><u>Name</u></label>
+                                <input type="text" style="position: relative; left: -35px;" class="form-control" placeholder="Workspace Name" id="editTeamWorkspaceModal_Name" data-bind="value: name$, disable: $root.busy$"></text>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row mb-4 pr-4">
+                        <div class="col-1">
+                            <i class="fa fa-user-circle" aria-hidden="true" style="font-size: 21px;"></i>
+                        </div>
+                        <div class="col-11">
+                            <div class="form-group">
+                                <label for="editTeamWorkspaceModal_Name" class="h6 d-block"><u>Parent</u></label>
+                                <select style="position: relative; left: -35px;" class="custom-select" data-bind="
+                                    value: parentId$,
+                                    options: parentOptions$,
+                                    optionsText: function(item) { return item.name$ },
+                                    optionsValue: function(item) { return item.workspaceId$ },
+                                    attr: { 'disabled': disableParentSelect$ }">
+                                 </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row mb-4 pr-4">
+                        <div class="col-1">
+                            <i class="fa fa-pencil" aria-hidden="true" style="font-size: 21px;"></i>
+                        </div>
+                        <div class="col-11">
+                            <div class="form-group">
+                                <label for="editTeamWorkspaceModal_Name" class="h6 d-block"><u>Notes</u></label>
+                                <textarea style="position: relative; left: -35px;" class="form-control" id="editTeamWorkspace_Notes" rows="2" data-bind="value: notes$, disable: $root.busy$" ></textarea>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- /ko -->
+                <div class="alert alert-danger" data-bind="text: error$(), visible: error$()"></div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger"  data-bind="click: hide, disable: busy$">Cancel</button>
+                <button type="button" class="btn btn-primary" data-bind="click: submit, hidden: busy$">Save</button>
+                <button class="btn btn-primary" type="button" data-bind="visible: busy$" disabled>
+                    <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Saving...
+                </button>
+            </div>
+        </div>
+    </div>
+</div>

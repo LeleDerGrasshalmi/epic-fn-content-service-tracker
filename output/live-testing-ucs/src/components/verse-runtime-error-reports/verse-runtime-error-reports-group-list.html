@@ -1,0 +1,48 @@
+<!-- Verse runtime error report modal -->
+<verse-runtime-error-report-modal params="context: verseRuntimeErrorReportModal"></verse-runtime-error-report-modal>
+
+<table class="table table-light table-striped">
+    <thead class="thead-dark">
+        <tr>
+            <th class="text-left">Runtime Errors</th>
+            <th class="text-center mr-2" style="width: 10%;">Occurrences</th>
+        </tr>
+    </thead>
+    <tbody>
+        <!-- ko foreach: source$ -->
+        <tr>
+            <td class="small align-middle text-monospace text-left">
+
+                <h5 class="mb-1">
+                    <div style="width: 14px; height: 14px;display: inline-block;", data-bind="style: { 'background-color': type.color }, attr: { title: type.label }"></div>
+                    <a class="small" href="javascript:" data-bind="text: topCrash.errorCode, click: () => $parent.showGroup($data)"></a>
+                </h5>
+                <div data-bind="text: topCrash.errorMessage" style="overflow: hidden; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; line-height: 1.8em;"></div>
+                <div class="mt-2">
+                    <i class="fa fa-clock-o" style="font-size:14px;position:relative;top:1px;"></i>
+                    <span data-bind="text: moment(latestCrashTime).fromNow()"></span> | <span data-bind="text: `${moment(earliestCrashTime).fromNow(true)} old`"></span>
+                    <i class="fa fa-info-circle pl-3" style="font-size:14px;position:relative;top:1px;" title="Latest build version seen with this error"></i>
+                    <span data-bind="text: latestVersion"></span>
+                    <!-- ko if: topCrash.linkCode -->
+                    <i class="fa fa-link pl-3" style="font-size:14px;position:relative;top:1px;" title="Link code"></i>
+                    <span data-bind="text: `${topCrash.linkCode} v${topCrash.linkCodeVersion}`"></span>
+                    <!-- /ko -->
+                </div>
+            </td>
+            <td class="align-middle text-center text-monospace">
+                <h5 class="mb-1 mr-2" style="font-weight: bolder"; data-bind="text: count.toLocaleString('en', {useGrouping:true})"></h5>
+            </td>
+        </tr>
+        <!-- /ko -->
+        <tr data-bind="visible: source$().length == 0">
+            <td class="" colspan="2">
+                <h6 class="mb-3">No Verse runtime errors were found.</h6>
+            </td>
+        </tr>
+        <tr data-bind="visible: hasMore$" class="text-right">
+            <td colspan="2">
+                <button type="button" class="btn btn-info btn-sm" data-bind="click: () => loadMore()">Load More</button>
+            </td>
+        </tr>
+    </tbody>
+</table>

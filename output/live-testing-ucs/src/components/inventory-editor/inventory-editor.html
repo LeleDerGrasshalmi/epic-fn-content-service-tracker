@@ -1,0 +1,54 @@
+<div class="row" data-bind="attr: { id: id$() }">
+    <div class="col">
+        <table class="table table-sm text-monospace borderless" style="table-layout: fixed;">
+            <thead>
+                <tr>
+                    <th width="1px">&nbsp;</th>
+                    <th width="35%">Path</th>
+                    <th>Value</th>
+                    <th width="80px">&nbsp;</th>
+                    <th width="3px"></th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- ko foreach: dataRows$ -->
+                    <tr style="cursor: pointer;" class="inventory-editor-row">
+                        <td class="text-nowrap" style="top: -10px;left: 10px;position: relative;font-size: xx-small;font-style: italic;" data-bind="hidden: _isNew">&nbsp;</td>
+                        <td class="text-nowrap new" style="top: -10px;left: 10px;position: relative;font-size: xx-small;font-style: italic;" data-bind="visible: _isNew">new</td>
+                        <td data-bind="css: { removed: _isRemoved, new: _isNew }">
+                            <div  class="scroll-x text-nowrap" style="word-break: break-word;" data-bind="text: path, attr: { title: path }"></div>
+                        </td>
+                        <td data-bind="css: { removed: _isRemoved, new: _isNew }">
+                            <div class="scroll-x text-nowrap" data-bind="text: valueString, hidden: _isEdit, attr: { title: valueString }"></div>
+                            <input type="text" style="font-family: monospace!important;font-size:13px;" class="form-control" data-bind="value: valueString, visible: _isEdit, event: { change: () => $parent.onDataRowChanged($data) }" />
+                        </td>
+                        <td class="text-right align-middle" style="padding-right:15px;">
+                            <a href="javascript:" class="small fa fa-clipboard" style="padding-right:12px;font-size:14px;" title="Copy" data-bind="hidden: (_isEdit || _isRemoved), attr: { 'data-clipboard-text': JSON.stringify(valueString, null, 2) }"></span>
+                            <a href="javascript:" class="fa fa-pencil" title="Edit" data-bind="click: () => $parent.setEditRow($data), hidden: (_isEdit || _isRemoved)"></a>
+                            <a href="javascript:" class="fa fa-trash text-danger" title="Remove" data-bind="click: () => $parent.setRemoveRow($data), hidden: (_isEdit || _isRemoved)"></a>
+                            <button class="btn btn-sm btn-secondary" data-bind="click: () => $parent.revertRow($data), visible: _isRemoved">Restore</button>
+                            <button class="btn btn-sm btn-secondary" data-bind="click: () => $parent.revertRow($data), visible: _isEdit">Revert</button>
+                        </td>
+                        <td width="3px">&nbsp;</td>
+                    </tr>
+                <!-- /ko -->
+            </tbody>
+        </table>
+
+        <!-- ADD NEW ROW -->
+        <!-- ko with: form -->
+        <form data-bind="submit: () => $parent.addRow(newRowPath$(), newRowValueStr$())">
+            <table class="table table-sm text-monospace borderless" style="table-layout: fixed;">
+                <tbody>
+                    <tr class="inventory-editor-new-row">
+                        <td style="width: 35%;"><input type="text" style="font-family: monospace!important;font-size:13px;" class="form-control" data-bind="value: newRowPath$, attr: { id: `${$parent.id$()}_new_path` }" /></td>
+                        <td><input type="text" style="font-family: monospace!important;font-size:13px;" class="form-control" data-bind="value: newRowValueStr$, attr: { id: `${$parent.id$()}_new_value` }" /></td>
+                        <td width="80px"><button class="btn btn-sm btn-success" type="submit">Add</button></td>
+                        <td width="3px">&nbsp;</td>
+                    </tr>
+                </tbody>
+            </table>
+        </form>
+        <!-- /ko -->
+    </div>
+</div>
