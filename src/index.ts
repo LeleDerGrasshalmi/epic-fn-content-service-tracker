@@ -13,6 +13,9 @@ const outputFolder = 'output';
 const main = async () => {
   const hostEntries = Object.entries(hosts);
 
+  // supress line ending warning
+  execSync('git config core.autocrlf false');
+
   for (let i = 0; i < hostEntries.length; i += 1) {
     const [deployment, host] = hostEntries[i];
     const deploymentFolder = `${outputFolder}/${deployment}`;
@@ -38,8 +41,6 @@ const main = async () => {
         }
       }
 
-      execSync(`git add ${deploymentFolder}`);
-
       const gitStatus = execSync(`git status ${deploymentFolder}`)?.toString('utf-8') || '';
       const isModified = gitStatus.includes(outputFolder);
 
@@ -55,6 +56,7 @@ const main = async () => {
         continue;
       }
 
+      execSync(`git add ${deploymentFolder}`);
       execSync('git config user.email "41898282+github-actions[bot]@users.noreply.github.com"');
       execSync('git config user.name "github-actions[bot]"');
       execSync('git config commit.gpgsign false');
