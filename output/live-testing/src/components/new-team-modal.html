@@ -1,0 +1,27 @@
+<div class="modal fade" id="newTeamModal" tabindex="-1" role="dialog" aria-labelledby="newTeamModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-body">
+                <!-- ko with: form -->
+                <div class="form-group">
+                    <label for="newTeamModal_Name" class="h6 d-block"><u>Name</u></label>
+                    <textarea class="form-control" placeholder="Name of Team" id="newTeamModal_Name" rows="1" data-bind="value: name$, disable: $root.busy$"></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="newTeamModal_Desc" class="h6 d-block"><u>Description</u></label>
+                    <textarea class="form-control" id="newTeamModal_Desc" rows="3" data-bind="value: description$, disable: $root.busy$"></textarea>
+                </div>
+                <!-- /ko -->
+                <div class="alert alert-danger" data-bind="text: error$(), visible: error$()"></div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger"  data-bind="click: hide, disable: busy$">Cancel</button>
+                <button type="button" class="btn btn-primary" data-bind="click: submit, hidden: busy$() || !!team$()">Create</button>
+                <button type="button" class="btn btn-primary" data-bind="click: submit, hidden: busy$() || !team$()">Update</button>
+                <button class="btn btn-primary" type="button" data-bind="visible: busy$" disabled>
+                    <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Creating...
+                </button>
+            </div>
+        </div>
+    </div>
+</div>

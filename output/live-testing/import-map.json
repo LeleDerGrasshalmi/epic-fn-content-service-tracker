@@ -1,0 +1,7 @@
+{
+  "imports": {
+      "@www/": "src/",
+      "@app/": "../../src/",
+      "js-sha256": "/js/sha256.js"
+  }
+}

@@ -1,0 +1,83 @@
+<nav class="navbar navbar-expand-md navbar-dark bg-dark" style="position: relative" data-bind="template: { afterRender: () => $('#csversion').load('/version') }">
+    <a href="/"><div class="logo"></div></a>
+    <span class="navbar-header">|</span>
+    <div class="small navbar-header">
+        <span>UEFN CS :</span>
+        <span id="csversion">
+            <!--
+                version fetched by template.afterRender in data-bind on <nav> element.
+            -->
+        </span>
+    </div>
+    <span class="navbar-header">|</span>
+    <div class="dropdown show" data-bind="hidden: !currentApplication$()">
+        <a class="btn navbar-btn-application dropdown-toggle" href="#" role="button" id="ApplicationDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            <span data-bind="text: `${currentApplication$()?.name}`, class: `${currentApplication$()?.style}`"></span>
+        </a>
+        <div class="dropdown-menu dropdown-menu-application" aria-labelledby="ApplicationDropdownMenuLink">
+            <!-- ko foreach: { data: allApplications$, as: 'application' } -->
+                <a class="dropdown-item" data-bind="click: () => window.open(application.link)">
+                    <span data-bind="text: `${application.name}`, class: `${application.style}`"></span>
+                    <i class="fa fa-solid fa-external-link-square"></i>
+                </a>
+            <!-- /ko -->
+        </div>
+      </div>
+    <span class="navbar-header" data-bind="hidden: !currentApplication$()">|</span>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#myNavbar7">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse flex-grow-1 text-right" id="myNavbar7">
+        <ul class="navbar-nav ml-auto flex-nowrap" data-bind="hidden: !user.ready$()">
+            <!-- ko if: enableDownloadInvalidScratchContent$() -->
+            <li class="nav-item" data-bind="visible: $root.user.loggedIn$">
+                <a class="nav-link" href="javascript:" data-bind="click: () => downloadInvalidScratch()" title="Download Invalid Scratch">Download Invalid Scratch</a>
+                <a id="invalidScratchDownload" href="javascript:" style="display: none;"></a>
+            </li>
+            <li class="nav-item" data-bind="visible: $root.user.loggedIn$">
+                <span class="nav-link">|</span>
+            </li>
+            <!-- /ko -->
+            <!-- ko if: !!permissions$().canViewCookers -->
+            <li class="nav-item" data-bind="visible: $root.user.loggedIn$">
+                <a class="nav-link" href="/cookers" title="Manage content workers">Content Workers</a>
+            </li>
+            <li class="nav-item" data-bind="visible: $root.user.loggedIn$">
+                <span class="nav-link">|</span>
+            </li>
+            <!-- /ko -->
+            <li class="nav-item" data-bind="visible: $root.user.loggedIn$">
+                <a class="nav-link" style="color: yellow;" href="/teams" title="View team membership">My Teams❗</a>
+            </li>
+            <li class="nav-item" data-bind="visible: $root.user.loggedIn$">
+                <span class="nav-link">|</span>
+            </li>
+            <li class="nav-item" data-bind="visible: $root.user.loggedIn$">
+                <a class="nav-link" href="/" title="View projects">My Projects</a>
+            </li>
+            <li class="nav-item" data-bind="visible: $root.user.loggedIn$">
+                <span class="nav-link">|</span>
+            </li>
+            <!-- ko if: typeof goToInventory === 'function' -->
+            <li class="nav-item" data-bind="visible: $root.user.loggedIn$">
+                <a class="nav-link" href="javascript:" data-bind="click: () => $root.goToInventory()" title="Go to project persistence.">Persistence</a>
+            </li>
+            <li class="nav-item" data-bind="visible: $root.user.loggedIn$">
+                <span class="nav-link">|</span>
+            </li>
+            <!-- /ko -->
+            <li class="nav-item" data-bind="visible: $root.user.loggedIn$">
+                <a class="nav-link" href="javascript:" data-bind="click: () => findAndOpenSomething()" title="Load anything by ID">GOTO</a>
+            </li>
+            <li class="nav-item" data-bind="visible: $root.user.loggedIn$">
+                <span class="nav-link">|</span>
+            </li>
+            <li class="nav-item" data-bind="visible: user.loggedIn$">
+                <a class="nav-link" href="javascript:" data-bind="click: user.logout" title="Log out of the control panel.">Logout</a>
+            </li>
+            <li class="nav-item" data-bind="hidden: user.loggedIn$">
+                <a class="nav-link" href="javascript:" data-bind="click: user.login" title="Log in to the control panel.">Login</a>
+            </li>
+        </ul>
+    </div>
+</nav>

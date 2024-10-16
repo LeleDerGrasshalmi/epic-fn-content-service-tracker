@@ -1,0 +1,45 @@
+<div class="modal fade" tabindex="-1" role="dialog" aria-hidden="true" data-bind="id: modalId, aria-labelledby: modalId">
+    <div class="modal-dialog modal-xl" role="document">
+        <!-- ko with: form.currentRuntimeErrorReport$ -->
+        <div class="modal-content" style="color: #F0EFEA">
+            <div class="modal-header">
+                <h5 class="modal-title">Runtime Error Report</h5>
+                <div class="icon-bar text-monospace small">
+                    Report ID: <span data-bind="text: crashGuid"></span>
+                </div>
+            </div>
+            <div class="modal-body text-monospace">
+                <h5 data-bind="text: errorCode"></h5>
+                <div data-bind="text: errorMessage"></div>
+                
+                <div class="mt-4">
+                    <h6><u>Stack Trace</u></h6>
+                    <textarea class="w-100 jsonMeta" rows="40" style="background-color: #3d3d3d; color: #ffffff" data-bind="value: callstack" readonly></textarea>
+                </div>
+
+                <div class="mt-3">
+                    <h6><u>Build Version</u></h6>
+                    <div data-bind="text: buildVersion"></div>
+                </div>
+
+                <!-- ko if: linkCode -->
+                <div class="mt-3">
+                    <h6><u>Link Code</u></h6>
+                    <div data-bind="text: `${linkCode} v${linkCodeVersion}`"></div>
+                </div>
+                <!-- /ko -->
+
+                <div class="mt-3">
+                    <h6><u>Module(s)</u></h6>
+                    <!-- ko foreach: vkModules -->
+                    <div data-bind="text: `${id} v${version}`"></div>
+                    <!-- /ko -->
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary"  data-bind="click: $parent.hide">Close</button>
+            </div>
+        </div>
+        <!-- /ko -->
+    </div>
+</div>
