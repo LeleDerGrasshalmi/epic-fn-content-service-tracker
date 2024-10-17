@@ -14,7 +14,7 @@ import {
     PlaytestGroup,
     PlaytestGroupMembership,
     TeamMemberPrefs,
-    Workspace,
+    WorkspaceDoc,
 } from "@app/types";
 
 import AuthUser from "@www/auth/user.model";
@@ -142,7 +142,7 @@ class MainViewModel {
     };
 
     public readonly workspacesForm = {
-        searchResults$: ko.observableArray<MappedObservable<Workspace&{creatorName:string}>>([]),
+        searchResults$: ko.observableArray<MappedObservable<WorkspaceDoc&{creatorName:string}>>([]),
     };
 
     public readonly playtestersForm = {
@@ -452,7 +452,7 @@ class MainViewModel {
         if (!workspaceId)
             return Promise.resolve();
 
-        if (!confirm(`Are you sure you want to delete the workspace "${name}"?`))
+        if (!confirm(`Are you sure you want to delete the workspacedoc "${name}"?`))
             return Promise.resolve();
 
         return this._doStuff(async () => {

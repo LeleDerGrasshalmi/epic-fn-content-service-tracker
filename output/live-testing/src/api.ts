@@ -54,7 +54,7 @@ import type {
     StaticModuleDoc,
     ValidatePublishResult,
     VerseRuntimeErrorCrashGroup, ModerationJobTypes,
-    Workspace,
+    WorkspaceDoc,
     CreateWorkspaceRequest,
     UpdateWorkspaceRequest,
 } from "@app/types";
@@ -1894,7 +1894,7 @@ export async function findWorkspacesByOwner(ownerId: string, limit = 20, afterNa
     if (afterName)
         url += `&afterName=${encodeURIComponent(afterName)}`;
 
-    const response = await fetchJsonAndThrow<PagedResults<Workspace&{creatorName: string},string>>(url, { method: "GET" });
+    const response = await fetchJsonAndThrow<PagedResults<WorkspaceDoc&{creatorName: string},string>>(url, { method: "GET" });
 
     // prefetch (so all these requests are in parallel)
     for (const result of response.results)
@@ -1910,18 +1910,18 @@ export async function findWorkspacesByOwner(ownerId: string, limit = 20, afterNa
         result.lastPublished = result.lastPublished && moment(result.lastPublished).toDate() || undefined;
     }
 
-    console.debug(`retrieved workspace list 1. ${response.results.length >= response.limit ? "(has more)" : "done."}`, response.results);
+    console.debug(`retrieved workspacedoc list 1. ${response.results.length >= response.limit ? "(has more)" : "done."}`, response.results);
     return response;
 }
 
-export async function createWorkspace(request: CreateWorkspaceRequest): Promise<Workspace>
+export async function createWorkspace(request: CreateWorkspaceRequest): Promise<WorkspaceDoc>
 {
     const method = "POST";
     const url = `${config.publicContentApiBaseUrl_v4}/workspace`;
     const headers = { ...DefaultHeaders };
     const body = JSON.stringify(request);
 
-    const result = await fetchJsonAndThrow<Workspace>(url, { method, headers, body });
+    const result = await fetchJsonAndThrow<WorkspaceDoc>(url, { method, headers, body });
     result.created = moment(result.created).toDate();
 
     // undefined doesn't come down the wire explicitly, and KO needs it for optional props.
@@ -1932,14 +1932,14 @@ export async function createWorkspace(request: CreateWorkspaceRequest): Promise<
     return result;
 }
 
-export async function updateWorkspace(workspaceId: string, request: UpdateWorkspaceRequest): Promise<Workspace>
+export async function updateWorkspace(workspaceId: string, request: UpdateWorkspaceRequest): Promise<WorkspaceDoc>
 {
     const method = "put";
     const url = `${config.publicContentApiBaseUrl_v4}/workspace/${encodeURIComponent(workspaceId)}`;
     const headers = { ...DefaultHeaders };
     const body = JSON.stringify(request);
 
-    const result = await fetchJsonAndThrow<Workspace>(url, { method, headers, body });
+    const result = await fetchJsonAndThrow<WorkspaceDoc>(url, { method, headers, body });
     result.created = moment(result.created).toDate();
 
     // undefined doesn't come down the wire explicitly, and KO needs it for optional props.
@@ -1956,5 +1956,5 @@ export async function deleteWorkspace(workspaceId: string): Promise<void> {
     const headers = { ...DefaultHeaders };
 
     const result = await fetchJsonAndThrow<void>(url, { method, headers });
-    console.debug(`delete workspace ${workspaceId}`, result);
+    console.debug(`delete workspacedoc ${workspaceId}`, result);
 }
