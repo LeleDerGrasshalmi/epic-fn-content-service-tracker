@@ -2,7 +2,7 @@ name: Update Data
 on:
   push:
   schedule:
-    - cron: "*/45 * * * *" # runs every 45 minutes
+    - cron: "*/20 * * * *" # runs every 20 minutes
 
 jobs:
   check-deployments:
