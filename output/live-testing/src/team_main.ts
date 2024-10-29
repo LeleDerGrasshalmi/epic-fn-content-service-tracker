@@ -176,7 +176,7 @@ class MainViewModel {
         this.viewSysMetaModal = new ViewSysMetaModal("team", this);
 
         void this.user.init().then(() => {
-            if (!this.user.loggedIn$())
+            if (!this.user.loggedIn$() && this.user.performLogin$())
                 this.user.login();
 
             void this._applyHashState();

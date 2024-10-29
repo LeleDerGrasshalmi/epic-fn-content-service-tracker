@@ -728,7 +728,7 @@ class MainViewModel {
     public setActiveProjectDoc(targetContent?: string | ProjectDoc): void {
         void this._doStuff(async () => {
 
-            if (!this.user.loggedIn$())
+            if (!this.user.loggedIn$() && this.user.performLogin$())
                 return;
 
             // ensure target content is a valid string or object.
