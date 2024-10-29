@@ -57,6 +57,7 @@ import type {
     WorkspaceDoc,
     CreateWorkspaceRequest,
     UpdateWorkspaceRequest,
+    LaunchDataAdditionalPayload,
 } from "@app/types";
 
 import config from "@www/config";
@@ -311,10 +312,13 @@ export async function addStar(projectId: string, is_new?: "new"): Promise<void> 
     await fetchJsonAndThrow(url, { method });
 }
 
-export async function launchLinkCode(linkCode: string): Promise<"notified"|"queued"> {
+export async function launchLinkCode(linkCode: string, optAdditionalPayload?: LaunchDataAdditionalPayload): Promise<"notified"|"queued"> {
     const method = "POST";
     const url = `${config.publicContentApiBaseUrl_v2}/launch/link/${encodeURIComponent(linkCode)}`;
-    const response = await fetchJsonAndThrow<{ status: "notified"|"queued" }>(url, { method });
+    const body = optAdditionalPayload && JSON.stringify(optAdditionalPayload);
+    const headers = { ...DefaultHeaders };
+
+    const response = await fetchJsonAndThrow<{ status: "notified"|"queued" }>(url, { method, headers, body });
     return response.status;
 }
 
