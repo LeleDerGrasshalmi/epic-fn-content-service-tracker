@@ -16,7 +16,7 @@ export default class AuthUser
     public ready$ = ko.observable<boolean>(false);
 
     /** true if user should be redirected to oauth login. */
-    public performLogin$ = ko.observable<boolean>(false);
+    public performLogin$ = ko.observable<boolean>(true);
 
     private _token_detail?: TokenDetail;
 
@@ -43,10 +43,8 @@ export default class AuthUser
 
             const response = ex.responseJSON;
 
-            if (response?.errorCode === "errors.com.epicgames.common.oauth.invalid_token"
-                || response?.errorCode === "errors.com.epicgames.content-service.token_not_found"
-                || response?.errorCode?.endsWith(".auth_required")) {
-                this.performLogin$(true);
+            if (response?.errorCode.endsWith(".invalid_auth")) {
+                this.performLogin$(false);
             }
         }
         finally
