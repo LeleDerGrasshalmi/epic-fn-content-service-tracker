@@ -110,7 +110,7 @@ class MainViewModel {
         this._projectLists.set(personalProjects.team, personalProjects);
 
         void this.user.init().then(() => {
-            if (!this.user.loggedIn$()) {
+            if (!this.user.loggedIn$() && this.user.performLogin$()) {
                 this.user.login();
                 return;
             }

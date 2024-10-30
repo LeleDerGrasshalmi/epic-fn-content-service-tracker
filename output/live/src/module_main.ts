@@ -390,7 +390,7 @@ class MainViewModel {
 
         return this._performOperationAsync(async () => {
 
-            if (!this.user.loggedIn$())
+            if (!this.user.loggedIn$() && this.user.performLogin$())
                 return;
 
             // ensure target content is a valid string or object.

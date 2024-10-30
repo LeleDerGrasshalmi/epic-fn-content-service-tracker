@@ -1,4 +1,4 @@
-import { Workspace } from "@app/types";
+import { WorkspaceDoc } from "@app/types";
 import * as API from "@www/api";
 import { parseErrorMessage } from "@www/util/errors";
 import { MappedObservable, toMappedObservable } from "@www/util/ko";
@@ -17,8 +17,8 @@ class EditTeamWorkspaceModal
 {
     public static RegisterComponents(_config: ComponentConfig): void
     {
-        ko.components.register("edit-team-workspace-modal", {
-            template: { fromUrl: `/src/components/edit-team-workspace-modal.html` },
+        ko.components.register("edit-team-workspacedoc-modal", {
+            template: { fromUrl: `/src/components/edit-team-workspacedoc-modal.html` },
             viewModel: { fromContextType: EditTeamWorkspaceModal },
         });
     }
@@ -28,8 +28,8 @@ class EditTeamWorkspaceModal
     protected _$modal: JQuery = $();
     protected readonly _parent: ParentInterface;
 
-    /** tracks  info for the workspace being modified. */
-    public readonly target$ = ko.observable<MappedObservable<Workspace> | null>();
+    /** tracks  info for the workspacedoc being modified. */
+    public readonly target$ = ko.observable<MappedObservable<WorkspaceDoc> | null>();
 
     /** tracks this modal instance's error state. */
     public readonly error$ = ko.observable("");
@@ -43,7 +43,7 @@ class EditTeamWorkspaceModal
         name$: ko.observable<string>(""),
         notes$: ko.observable<string>(""),
         parentId$: ko.observable<string>(""),
-        parentOptions$: ko.observableArray<MappedObservable<Workspace>>(),
+        parentOptions$: ko.observableArray<MappedObservable<WorkspaceDoc>>(),
 
         disableParentSelect$: ko.observable<boolean>(false),
     };
@@ -53,7 +53,7 @@ class EditTeamWorkspaceModal
         this._parent = parent;
     }
 
-    protected _init(options: MappedObservable<Workspace>[] = []): void
+    protected _init(options: MappedObservable<WorkspaceDoc>[] = []): void
     {
         this._$modal = this.$rootEl.children().first();
         this.error$("");
@@ -64,12 +64,12 @@ class EditTeamWorkspaceModal
         this.form.disableParentSelect$(false);
 
         const parentOptions = options.filter(x => !x.parentId$());
-        const none = toMappedObservable<Workspace>({ workspaceId: "", name: "--no parent--", parentId: undefined, notes: undefined, owner: { type: "account", id: "" }, created: new Date(), lastPublished: undefined, creator: { type: "account", id: "" } })
+        const none = toMappedObservable<WorkspaceDoc>({ workspaceId: "", name: "--no parent--", parentId: undefined, notes: undefined, owner: { type: "account", id: "" }, created: new Date(), lastPublished: undefined, creator: { type: "account", id: "" } })
         parentOptions.unshift(none);
         this.form.parentOptions$(parentOptions)
     }
 
-    public show(target: MappedObservable<Workspace> | null, options: MappedObservable<Workspace>[]): void
+    public show(target: MappedObservable<WorkspaceDoc> | null, options: MappedObservable<WorkspaceDoc>[]): void
     {
         this._init(options);
         this.target$(target);
