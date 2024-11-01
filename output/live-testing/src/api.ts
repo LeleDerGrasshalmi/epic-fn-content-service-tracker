@@ -1082,7 +1082,7 @@ export async function setMetadata(docType: "module"|"project", docId: string, me
     return result;
 }
 
-export async function setSysMeta(docType: "team"|"project", docId: string, meta: Record<string, unknown>): Promise<Record<string, unknown>> {
+export async function setSysMeta(docType: "team"|"project"|"module", docId: string, meta: Record<string, unknown>): Promise<Record<string, unknown>> {
     const method = "PUT";
     const url = `${config.publicContentApiBaseUrl_v2}/${encodeURIComponent(docType)}/${encodeURIComponent(docId)}/meta/sys`;
     const headers = { ...DefaultHeaders };

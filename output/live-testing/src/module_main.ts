@@ -43,8 +43,9 @@ ValidateModal.RegisterComponents();
 import NewVersionModal from "@www/components/new-version-modal";
 NewVersionModal.RegisterComponents(config);
 
-import { ViewMetaModal } from "@www/components/view-metadata-modal";
+import { ViewMetaModal, ViewSysMetaModal } from "@www/components/view-metadata-modal";
 ViewMetaModal.RegisterComponents(config);
+ViewSysMetaModal.RegisterComponents(config);
 
 import MetaEditor from "@www/components/meta-editor/meta-editor";
 MetaEditor.RegisterComponents(config);
@@ -67,6 +68,9 @@ class MainViewModel {
 
     /** modal context used by the page for viewing content document meta. */
     public readonly viewMetaModal: ViewMetaModal;
+
+    /** modal context used by the page for sys meta data. */
+    public readonly viewSysMetaModal: ViewSysMetaModal;
 
     /** (COMMON) refences the page's location.hashchange event delegate. */
     protected _hashChangeFn = (): void => this._applyHashState();
@@ -106,6 +110,9 @@ class MainViewModel {
     // can the user download projects
     public readonly hasProjectDownloadPermission$ = ko.observable<boolean|undefined>(false);
 
+    // can the user update sysMeta
+    public readonly permissions$ = ko.observable<Record<string,true|undefined>>({});
+
     /** emits the active content version document, or null. */
     public readonly contentVersionDoc$ = ko.observable<ModuleVersionDocWithArtifacts>();
 
@@ -142,6 +149,7 @@ class MainViewModel {
         this.validateModal = new ValidateModal(this);
         this.newVersionModal = new NewVersionModal(this);
         this.viewMetaModal = new ViewMetaModal("module", this);
+        this.viewSysMetaModal = new ViewSysMetaModal("module", this);
 
         // whenever the contentDoc changes, sync the appropriate form fields.
         this.contentDoc$.subscribe((doc) => {
@@ -240,9 +248,25 @@ class MainViewModel {
         return { meta: contentDoc.meta, docId: contentDoc.moduleId };
     }
 
+    public getSysMeta(): { sysMeta: Record<string, unknown>, docId: string } | undefined {
+        const contentDoc = this.contentDoc$();
+        if (!contentDoc)
+            return undefined;
+        return { sysMeta: contentDoc.sysMeta, docId: contentDoc.moduleId };
+    }
+
     public setMeta(meta: Record<string, unknown>): void {
         const newContent = { ...this.contentDoc$(), meta };
         this.contentDoc$(newContent as ModuleDoc);
+    }
+
+    public setSysMeta(sysMeta: Record<string,unknown>): void {
+        const moduleDoc = this.contentDoc$();
+        if (!moduleDoc)
+            throw new Error("project not set");
+
+        const newContent = { ...moduleDoc, sysMeta };
+        this.contentDoc$(newContent);
     }
 
     public getProjectId(): string | undefined {
@@ -769,6 +793,7 @@ class MainViewModel {
         const webClientConfig = await API.getWebClientConfig();
         const { permissions } = webClientConfig;
         this.hasProjectDownloadPermission$(permissions.canDownloadModules);
+        this.permissions$(permissions);
     }
 }
 

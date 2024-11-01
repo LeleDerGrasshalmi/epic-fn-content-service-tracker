@@ -1,3 +1,6 @@
+/* eslint-disable @typescript-eslint/explicit-function-return-type */
+/* eslint-disable @typescript-eslint/require-await */
+
 import * as API from "@www/api";
 import { parseErrorMessage } from "@www/util/errors";
 
@@ -113,7 +116,7 @@ class ViewMetaModal extends ViewMetadataModal
             {
                 // submit meta changes to api.
                 this.busy$(true);
-                let contentMeta = await API.setMetadata(this.docType, this._docId, this.metaChanges$());
+                const contentMeta = await API.setMetadata(this.docType, this._docId, this.metaChanges$());
 
                 // notify parent of document changes.
                 this.parent.setMeta(contentMeta);
@@ -159,7 +162,7 @@ class ViewSysMetaModal extends ViewMetadataModal
     /** emits source meta records. */
     public readonly metaSource$ = ko.observable<Record<string, unknown>>({});
 
-    constructor(public readonly docType: "project"|"team", parent: SysMetaParentInterface)
+    constructor(public readonly docType: "project"|"team"|"module", parent: SysMetaParentInterface)
     {
         super();
         this.parent = parent;
@@ -190,7 +193,7 @@ class ViewSysMetaModal extends ViewMetadataModal
             {
                 // submit meta changes to api.
                 this.busy$(true);
-                let contentMeta = await API.setSysMeta(this.docType, this._docId, this.metaChanges$());
+                const contentMeta = await API.setSysMeta(this.docType, this._docId, this.metaChanges$());
 
                 // notify parent of document changes.
                 this.parent.setSysMeta(contentMeta);
